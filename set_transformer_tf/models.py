@@ -18,16 +18,20 @@ def perm_equiv(X, n_hid, activation=None, ops='mean'):
 
 def encode(X, arch='ff', n_inds=None):
     if arch == 'ff':
-        model = Sequential([
-            Dense(128),
-            Activation('relu'),
-            Dense(128),
-            Activation('relu'),
-            Dense(128),
-            Activation('relu'),
-            Dense(128)
-        ])
-        X = model(X)
+        X = Activation('relu')(Dense(128)(X))
+        X = Activation('relu')(Dense(128)(X))
+        X = Activation('relu')(Dense(128)(X))
+        X = Dense(128)(X)
+        # model = Sequential([
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128)
+        # ])
+        # X = model(X)
     elif arch == 'perm_eq_mean':
         X = perm_equiv(X, 128, activation='relu')
         X = perm_equiv(X, 128, activation='relu')
@@ -53,16 +57,23 @@ def encode(X, arch='ff', n_inds=None):
 def decode(X, shape, arch='ff'):
     if arch == 'ff':
         X = tf.reduce_mean(X, axis=1)
-        model = Sequential([
-            Dense(128),
-            Activation('relu'),
-            Dense(128),
-            Activation('relu'),
-            Dense(128),
-            Activation('relu'),
-            Dense(np.prod(shape))
-        ])
-        X = model(X)
+
+        X = Activation('relu')(Dense(128)(X))
+        X = Activation('relu')(Dense(128)(X))
+        X = Activation('relu')(Dense(128)(X))
+        X = Dense(np.prod(shape))(X)
+
+        # model = Sequential([
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(np.prod(shape))
+        # ])
+        # X = model(X)
+
         X = tf.reshape(X, [-1] + shape)
     elif arch == 'sab':
         K = shape[0]
@@ -74,16 +85,23 @@ def decode(X, shape, arch='ff'):
         C = Activation('tanh')(Dense(128)(X))
         S = softmax(C, axis=1)
         X = tf.reduce_sum(X * S, axis=1)
-        model = Sequential([
-            Dense(128),
-            Activation('relu'),
-            Dense(128),
-            Activation('relu'),
-            Dense(128),
-            Activation('relu'),
-            Dense(np.prod(shape))
-        ])
-        X = model(X)
+
+        X = Activation('relu')(Dense(128)(X))
+        X = Activation('relu')(Dense(128)(X))
+        X = Activation('relu')(Dense(128)(X))
+        X = Dense(np.prod(shape))(X)
+
+        # model = Sequential([
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(128),
+        #     Activation('relu'),
+        #     Dense(np.prod(shape))
+        # ])
+        # X = model(X)
+
         X = tf.reshape(X, [-1] + shape)
     else:
         raise ValueError('Invalid decoder architecture')

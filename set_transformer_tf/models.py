@@ -109,9 +109,9 @@ def decode(X, shape, arch='ff'):
 
 
 def build_model(X, K, D, enc='ff', dec='ff', n_inds=None, n_unrolls=1):
-    with tf.variable_scope('encoder', reuse=tf.AUTO_REUSE):
+    with tf.compat.v1.variable_scope('encoder', reuse=tf.compat.v1.AUTO_REUSE):
         outs = encode(X, arch=enc, n_inds=n_inds)
-    with tf.variable_scope('decoder', reuse=tf.AUTO_REUSE):
+    with tf.compat.v1.variable_scope('decoder', reuse=tf.compat.v1.AUTO_REUSE):
         outs = decode(outs, [K, 1+2*D], arch=dec)
 
         # TODO:: explanation of pi, mu, and sigma

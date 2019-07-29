@@ -38,9 +38,9 @@ K = args.K
 D = 2
 save_freq = args.save_freq
 
-X = tf.placeholder(tf.float32, [None, None, D])
-global_step = tf.train.get_or_create_global_step()
-lr = tf.train.piecewise_constant(tf.cast(global_step, dtype=tf.int32), [int(0.7*n_steps)], [lr, 0.1*lr])
+X = tf.compat.v1.placeholder(tf.float32, [None, None, D])
+global_step = tf.compat.v1.train.get_or_create_global_step()
+lr = tf.compat.v1.train.piecewise_constant(tf.cast(global_step, dtype=tf.int32), [int(0.7*n_steps)], [lr, 0.1*lr])
 
 # Architecture combinations
 enc = args.enc
@@ -65,10 +65,10 @@ else:
 def train():
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
-    train_op = tf.train.AdamOptimizer(lr).minimize(-model['ll'][0], global_step=global_step)
-    saver = tf.train.Saver()
-    sess = tf.Session()
-    sess.run(tf.global_variables_initializer())
+    train_op = tf.compat.v1.train.AdamOptimizer(lr).minimize(-model['ll'][0], global_step=global_step)
+    saver = tf.compat.v1.train.Saver()
+    sess = tf.compat.v1.Session()
+    sess.run(tf.compat.v1.global_variables_initializer())
     logfile = open(os.path.join(save_dir, time.strftime('%Y%m%d-%H%M%S') + '.log'), 'wb', 0)
 
     for t in range(1, n_steps + 1):

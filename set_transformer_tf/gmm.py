@@ -41,7 +41,7 @@ def gmm_loglikel(X, params):
     px = MVNDiag(tf.expand_dims(params['mu'], 1), tf.expand_dims(params['sigma'], 1))
 
     # M * N * K
-    ll = tf.log(tf.expand_dims(params['pi'], 1) + 1e-10) + px.log_prob(tf.expand_dims(X, 2))
+    ll = tf.math.log(tf.expand_dims(params['pi'], 1) + 1e-10) + px.log_prob(tf.expand_dims(X, 2))
 
     # M * N
     y = tf.argmax(ll, 2)

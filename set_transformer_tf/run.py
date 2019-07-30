@@ -24,6 +24,7 @@ parser.add_argument('--num_steps', type=int, default=50000)
 parser.add_argument('--test_freq', type=int, default=200)
 parser.add_argument('--save_freq', type=int, default=400)
 parser.add_argument('--exp_name', type=str, default='trial')
+parser.add_argument('--net', type=str, default='set_transformer')
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
@@ -46,6 +47,15 @@ lr = tf.train.piecewise_constant(tf.cast(global_step, dtype=tf.int32), [int(0.7*
 enc = args.enc
 dec = args.dec
 n_inds = args.n_inds
+if args.net == 'set_transformer':
+    enc = 'sab'
+    n_inds = 32
+    dec = 'sabsab'
+elif args.net == 'deepset':
+    enc = 'ff'
+    dec = 'ff'
+else:
+    pass
 arch = enc if enc == dec else enc + '_' + dec
 
 # Set directory to save model

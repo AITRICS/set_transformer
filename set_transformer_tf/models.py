@@ -81,6 +81,13 @@ def decode(X, shape, arch='ff'):
         X = SAB(X, 128, 4)
         X = Dense(np.prod(shape[1:]))(X)
         X = tf.reshape(X, [-1] + shape)
+    elif arch == 'sabsab':
+        K = shape[0]
+        X = IMAB(X, K, 128, 4, var_name='seed')
+        X = SAB(X, 128, 4)
+        X = SAB(X, 128, 4)
+        X = Dense(np.prod(shape[1:]))(X)
+        X = tf.reshape(X, [-1] + shape)
     elif arch == 'dotprod':
         C = Activation('tanh')(Dense(128)(X))
         S = softmax(C, axis=1)

@@ -1,0 +1,127 @@
+<!--
+Copyright 2018 Google LLC. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================
+-->
+
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./tfjs-examples.css" />
+</head>
+
+<style>
+  .setting {
+    padding: 6px;
+  }
+
+  #trainModel {
+    margin-top: 12px;
+  }
+
+  .setting-label {
+    display: inline-block;
+    width: 12em;
+  }
+
+  .answer-correct {
+    color: green;
+  }
+
+  .answer-wrong {
+    color: red;
+  }
+</style>
+
+<body>
+  <div class='tfjs-example-container centered-container'>
+    <section class='title-area'>
+      <h1>TensorFlow.js: Set Transformer</h1>
+      <p class='subtitle'>Max Regression Demo</p>
+    </section>
+    <section>
+      <p class='section-head'>Description</p>
+      <p>
+          1. Small Set Transformer </br>
+          2. Small Max Deepset </br>
+          3. Small Mean Deepset </br>
+          4. Small Sum Deepset </br>
+      </p>
+    </section>
+
+    <div>
+      <section>
+        <p class='section-head'>Instructions</p>
+        <p>
+          Click the "Train Model" to start the model training button. You can edit the
+          parameters used to train the model as well.
+        </p>
+      </section>
+      <div class="controls with-rows">
+        <div class="settings">
+          <div class="setting">
+            <span class="setting-label">Training Iterations:</span>
+            <input id="trainIterations" value="30"></input>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Batch Size:</span>
+            <input id="batchSize" value="1024"></input>
+          </div>
+          <div class="setting">
+              <span class="setting-label">Learning Rate:</span>
+              <input id="learningRate" value="1e-4"></input>
+          </div>
+          <div class="setting">
+              <span class="setting-label">Hidden Size:</span>
+              <input id="hiddenSize" value="64"></input>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span>
+          <button class="btn-primary" id="trainModel">Train Model</button>
+        </span>
+      </div>
+
+      <section>
+        <p class='section-head'>Model Summary</p>
+        <p>1. Small Max Deepset</p>
+        <div id='maxModelSummary'></div>
+        <p>2. Small Mean Deepset</p>
+        <div id='meanModelSummary'></div>
+        <p>3. Small Set Transformer</p>
+        <div id='transformerSummary'></div>
+      </section>
+
+      <section>
+          <p class='section-head'>Input Value Distribution</p>
+          <div id='valueDist'></div>
+        </section>
+
+      <section>
+        <p class='section-head'>Training Progress</p>
+        <p id="trainStatus"></p>
+        <div class='with-cols'>
+          <div id="lossChart"></div>
+          <div id="accuracyChart"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</body>
+
+<script src="index.js"></script>

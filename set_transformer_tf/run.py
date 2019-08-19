@@ -3,6 +3,7 @@ import time
 import argparse
 import pickle
 import tensorflow as tf
+# import tensorflowjs as tfjs
 
 from models import *
 from gmm import gmmrnd_easy
@@ -39,10 +40,6 @@ K = args.K
 D = 2
 save_freq = args.save_freq
 
-X = tf.compat.v1.placeholder(tf.float32, [None, None, D])
-global_step = tf.compat.v1.train.get_or_create_global_step()
-lr = tf.compat.v1.train.piecewise_constant(tf.cast(global_step, dtype=tf.int32), [int(0.7*n_steps)], [lr, 0.1*lr])
-
 # Architecture combinations
 enc = args.enc
 dec = args.dec
@@ -58,11 +55,14 @@ else:
     pass
 arch = enc if enc == dec else enc + '_' + dec
 
-# Set directory to save model
+# Set save directory and tfjs directory
 if n_inds is not None and enc == 'sab':
     arch += '_' + str(n_inds)
 save_dir = os.path.join('./results', arch, args.exp_name)
+# tfjs_dir = os.path.join('./results', arch, 'tfjs')
 
+# Placeholder input
+X = tf.compat.v1.placeholder(tf.float32, [None, None, D])
 model = build_model(X, K, D, enc=enc, dec=dec, n_inds=n_inds)
 
 if not os.path.isfile('benchmark.pkl'):
@@ -71,6 +71,8 @@ else:
     with open('benchmark.pkl', 'rb') as f:
         bench = pickle.load(f)
 
+global_step = tf.compat.v1.train.get_or_create_global_step()
+lr = tf.compat.v1.train.piecewise_constant(tf.cast(global_step, dtype=tf.int32), [int(0.7*n_steps)], [lr, 0.1*lr])
 
 def train():
     if not os.path.isdir(save_dir):
@@ -93,7 +95,10 @@ def train():
             test(sess=sess, logfile=logfile)
         if t % save_freq == 0:
             saver.save(sess, os.path.join(save_dir, 'model'))
+    model.save_weights('./model.h5')
     saver.save(sess, os.path.join(save_dir, 'model'))
+
+    # tfjs.converters.save_keras_model(sess, tfjs_dir)
     logfile.close()
 
 
